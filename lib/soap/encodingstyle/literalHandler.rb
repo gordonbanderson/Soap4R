@@ -114,7 +114,7 @@ class LiteralHandler < Handler
   #
   def decode_tag(ns, elename, attrs, parent)
     @textbuf.clear
-    if attrs[XSD::AttrNilName] == 'true'
+    if ['1', 'true'].include?(attrs[XSD::AttrNilName])
       o = SOAPNil.decode(elename)
     else
       o = SOAPElement.decode(elename)
