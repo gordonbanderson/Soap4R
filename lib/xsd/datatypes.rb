@@ -920,17 +920,24 @@ class XSDBase64Binary < XSDAnySimpleType
     init(Type, value)
   end
 
+  #FIXME - allow nil values as they are
   def set_encoded(value)
-    if /^[A-Za-z0-9+\/=]*$/ !~ value
+    if value == nil
+      @is_nil = true
+      @data = nil
+    elsif /^[A-Za-z0-9+\/=]*$/ !~ value
       raise ValueSpaceError.new("#{ type }: cannot accept '#{ value }'.")
+    else
+      @data = String.new(value).strip
+      @is_nil = false
     end
-    @data = String.new(value).strip
-    @is_nil = false
     self
   end
 
   def string
-    @data.unpack("m")[0]
+    result = nil
+    result = @data.unpack("m")[0] if data != nil
+    result
   end
 
 private
